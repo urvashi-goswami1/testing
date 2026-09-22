@@ -1,0 +1,126 @@
+classDiagram
+
+    %% =========================
+    %% CUSTOMER
+    %% =========================
+
+    class Customer {
+        -int customerId
+        -String name
+        -String email
+        -String phone
+        -String address
+        +openAccount()
+        +closeAccount()
+        +viewAccount()
+        +updateDetails()
+    }
+
+    %% =========================
+    %% ACCOUNT
+    %% =========================
+
+    class Account {
+        <<abstract>>
+        -int accountNumber
+        -double balance
+        -String accountType
+        -String status
+        +deposit(double amount)
+        +withdraw(double amount)
+        +checkBalance()
+        +transfer(double amount)
+        +closeAccount()
+    }
+
+    %% =========================
+    %% SAVINGS ACCOUNT
+    %% =========================
+
+    class SavingsAccount {
+        -double interestRate
+        -double minimumBalance
+        +calculateInterest()
+        +withdraw(double amount)
+    }
+
+    %% =========================
+    %% CURRENT ACCOUNT
+    %% =========================
+
+    class CurrentAccount {
+        -double overdraftLimit
+        -double serviceCharge
+        +withdraw(double amount)
+        +calculateCharge()
+    }
+
+    %% =========================
+    %% TRANSACTION
+    %% =========================
+
+    class Transaction {
+        -int transactionId
+        -String transactionType
+        -double amount
+        -Date transactionDate
+        -String status
+        +createTransaction()
+        +getTransactionDetails()
+        +updateStatus()
+    }
+
+    %% =========================
+    %% BANK
+    %% =========================
+
+    class Bank {
+        -int bankId
+        -String bankName
+        -String branch
+        -String address
+        +addCustomer()
+        +removeCustomer()
+        +openAccount()
+        +closeAccount()
+        +manageEmployee()
+    }
+
+    %% =========================
+    %% EMPLOYEE
+    %% =========================
+
+    class Employee {
+        -int employeeId
+        -String name
+        -String email
+        -String designation
+        -double salary
+        +addCustomer()
+        +manageAccount()
+        +processTransaction()
+        +generateReport()
+    }
+
+    %% =========================
+    %% INHERITANCE
+    %% =========================
+
+    Account <|-- SavingsAccount
+    Account <|-- CurrentAccount
+
+    %% =========================
+    %% ASSOCIATIONS
+    %% =========================
+
+    Customer "1" --> "1..*" Account : owns
+
+    Account "1" --> "0..*" Transaction : has
+
+    Bank "1" o-- "0..*" Customer : serves
+
+    Bank "1" o-- "1..*" Employee : employs
+
+    Bank "1" o-- "0..*" Account : manages
+
+    Employee "1" --> "0..*" Transaction : processes
