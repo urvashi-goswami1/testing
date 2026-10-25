@@ -1,0 +1,314 @@
+Practical Automation Testing Scenarios  
+Demo Website: https://www.saucedemo.com/ 
+Username: standard_user 
+Password: secret_sauce 
+
+=============================================
+1. Login Testing 
+Objective: Automate the SauceDemo login page and verify successful login. 
+Demo URL: https://www.saucedemo.com/ 
+Java Selenium Code: 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class LoginTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.manage().window().maximize(); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+String pageTitle = driver.findElement(By.className("title")).getText(); 
+if (pageTitle.equals("Products")) { 
+System.out.println("PASS: Login successful"); 
+} else { 
+System.out.println("FAIL: Login unsuccessful"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+2. Invalid Login Testing 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class InvalidLoginTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("wrong_user"); 
+driver.findElement(By.id("password")).sendKeys("wrong_password"); 
+driver.findElement(By.id("login-button")).click(); 
+String error = driver.findElement(By.cssSelector("[data-test='error']")).getText(); 
+System.out.println("Error message: " + error); 
+System.out.println("PASS: Invalid login handled"); 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+3. Verify Products 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class ProductTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+int products = driver.findElements(By.className("inventory_item")).size(); 
+System.out.println("Number of products: " + products); 
+if (products > 0) { 
+System.out.println("PASS: Products displayed"); 
+} else { 
+System.out.println("FAIL: Products not displayed"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+4. Add Product to Cart 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class AddToCartTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click(); 
+String badge = driver.findElement( By.className("shopping_cart_badge")).getText(); 
+if (badge.equals("1")) { 
+System.out.println("PASS: Product added to cart"); 
+} else { 
+System.out.println("FAIL: Product not added"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+5. Verify Product in Cart 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class VerifyCartTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click(); 
+driver.findElement(By.className("shopping_cart_link")).click(); 
+String productName = driver.findElement(                  
+By.className("inventory_item_name")).getText(); 
+if (productName.equals("Sauce Labs Backpack")) { 
+System.out.println("PASS: Product verified"); 
+} else { 
+System.out.println("FAIL: Product verification failed"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+6. Remove Product from Cart 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class RemoveCartTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click(); 
+driver.findElement(By.className("shopping_cart_link")).click(); 
+driver.findElement(By.id("remove-sauce-labs-backpack")).click(); 
+int items = driver.findElements(By.className("cart_item")).size(); 
+if (items == 0) { 
+System.out.println("PASS: Product removed"); 
+} else { 
+System.out.println("FAIL: Product still present"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+=============================================
+7. Product Sorting 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+import org.openqa.selenium.support.ui.Select; 
+public class ProductSortTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password").sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+Select sort = new Select(driver.findElement(By.className("product_sort_container"))); 
+sort.selectByValue("lohi"); 
+System.out.println("Selected: Price (low to high)"); 
+System.out.println("PASS: Product sorting completed"); 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+8. Product Details Testing 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class ProductDetailsTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("item_4_title_link")).click(); 
+String product = driver.findElement(By.className("inventory_details_name")).getText(); 
+if (product.equals("Sauce Labs Backpack")) { 
+System.out.println("PASS: Product details displayed"); 
+} else { 
+System.out.println("FAIL: Product details incorrect"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+9. Checkout Form Testing 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class CheckoutTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("add-to-cart-sauce-labs-backpack")).click(); 
+driver.findElement(By.className("shopping_cart_link")).click(); 
+driver.findElement(By.id("checkout")).click(); 
+driver.findElement(By.id("first-name")).sendKeys("MCA"); 
+driver.findElement(By.id("last-name")).sendKeys("Student"); 
+driver.findElement(By.id("postal-code")).sendKeys("380001"); 
+driver.findElement(By.id("continue")).click(); 
+String title = driver.findElement(By.className("title")).getText(); 
+if (title.equals("Checkout: Overview")) { 
+System.out.println("PASS: Checkout details accepted"); 
+} else { 
+System.out.println("FAIL: Checkout failed"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+10. Complete E-Commerce Testing 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class EcommerceTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.manage().window().maximize(); 
+// Login 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+// Add product 
+driver.findElement( 
+By.id("add-to-cart-sauce-labs-backpack")).click(); 
+// Open cart 
+driver.findElement(By.className("shopping_cart_link")).click(); 
+// Checkout 
+driver.findElement(By.id("checkout")).click(); 
+// Customer details 
+driver.findElement(By.id("first-name")).sendKeys("MCA"); 
+driver.findElement(By.id("last-name")).sendKeys("Student"); 
+driver.findElement(By.id("postal-code")).sendKeys("380001"); 
+driver.findElement(By.id("continue")).click(); 
+// Finish order 
+driver.findElement(By.id("finish")).click(); 
+// Verify order 
+String message = driver.findElement(By.className("complete-header")).getText(); 
+if (message.equals("Thank you for your order!")) { 
+System.out.println( 
+"PASS: Order completed successfully"); 
+} else { 
+System.out.println( 
+"FAIL: Order confirmation not found"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
+
+=============================================
+11. Logout Testing 
+import org.openqa.selenium.By; 
+import org.openqa.selenium.WebDriver; 
+import org.openqa.selenium.chrome.ChromeDriver; 
+public class LogoutTest { 
+public static void main(String[] args) { 
+WebDriver driver = new ChromeDriver(); 
+try { 
+driver.get("https://www.saucedemo.com/"); 
+driver.findElement(By.id("user-name")).sendKeys("standard_user"); 
+driver.findElement(By.id("password")).sendKeys("secret_sauce"); 
+driver.findElement(By.id("login-button")).click(); 
+driver.findElement(By.id("react-burger-menu-btn")).click(); 
+driver.findElement(By.id("logout_sidebar_link")).click(); 
+if (driver.findElement(By.id("login-button")).isDisplayed()) { 
+System.out.println("PASS: Logout successful"); 
+} else { 
+System.out.println("FAIL: Logout failed"); 
+} 
+} finally { 
+driver.quit(); 
+} 
+} 
+} 
